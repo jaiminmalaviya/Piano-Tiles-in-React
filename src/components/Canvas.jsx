@@ -2,14 +2,26 @@ import React, { useEffect, useRef, useState } from 'react'
 import data from '../data/data'
 import GameMessage from './GameMessage'
 import { addRow, displayRow, restartGame, handleGameUserInput } from '../utils/GameLogic'
+import audio1 from '../assets/songs/1.mp3'
+import audio2 from '../assets/songs/2.mp3'
+import audio3 from '../assets/songs/3.mp3'
+import audio4 from '../assets/songs/4.mp3'
+import audio5 from '../assets/songs/5.mp3'
+import audio6 from '../assets/songs/6.mp3'
+import audio7 from '../assets/songs/7.mp3'
+import muteImage from '../assets/images/mute.png'
+import unmuteImage from '../assets/images/unmute.png'
 
 const Canvas = () => {
    const [score, setScore] = useState(0)
    const [showWelcomeMessage, setShowWelcomeMessage] = useState(true)
    const [isGameOver, setIsGameOver] = useState(false)
    const [isGameStarted, setIsGameStarted] = useState(false)
+   const [isMuted, setIsMuted] = useState(false)
+   const audioFiles = [audio1, audio2, audio3, audio4, audio5, audio6, audio7]
 
    const canvasRef = useRef(null)
+   const audioRef = useRef(null)
    const { config, tileRows } = data
    let requestId
 
@@ -82,11 +94,32 @@ const Canvas = () => {
       }
    }, [showWelcomeMessage, isGameStarted, isGameOver])
 
+   useEffect(() => {
+      const audio = audioRef.current
+      if (audio && isGameStarted) {
+         audio.src = audioFiles[Math.floor(Math.random() * audioFiles.length)]
+         audio.loop = true
+         audio.play().catch((error) => console.error('Audio playback error:', error))
+      }
+      return () => {
+         if (audio) audio.pause()
+      }
+   }, [isGameStarted])
+
+   const toggleMute = () => {
+      const audio = audioRef.current
+      if (audio) {
+         audio.muted = !audio.muted
+         setIsMuted(!isMuted)
+      }
+   }
+
    return (
       <>
          <div className="absolute font-bold text-2xl left-1/2 transform -translate-x-1/2 top-3 text-white bg-slate-600 px-2 min-w-9 rounded m-auto">
             {score}
          </div>
+
          <canvas
             id="gameCanvas"
             className="border-[0.5px] border-gray-300"
@@ -100,7 +133,6 @@ const Canvas = () => {
                Piano Tiles Game
             </h1>
          )}
-
          {showWelcomeMessage && (
             <GameMessage
                message="Let's Start Tapping"
@@ -110,7 +142,6 @@ const Canvas = () => {
                }
             />
          )}
-
          {isGameOver && (
             <GameMessage
                message="Opps! Wrong Tile"
@@ -120,6 +151,21 @@ const Canvas = () => {
                }
             />
          )}
+         <audio
+            ref={audioRef}
+            loop
+         />
+
+         <button
+            onClick={toggleMute}
+            className="absolute right-2 top-2 bg-cyan-500 rounded outline-0"
+         >
+            <img
+               src={isMuted ? muteImage : unmuteImage}
+               alt={isMuted ? 'Mute' : 'Unmute'}
+               width={50}
+            />
+         </button>
       </>
    )
 }
