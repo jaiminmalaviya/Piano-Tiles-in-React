@@ -1,7 +1,7 @@
 export default {
    tileRows: [],
    config: {
-      width: Math.min(window.innerWidth, 340),
+      width: Math.min(window.innerWidth, 400),
       height: window.innerHeight,
       rows: 5,
       cols: 4,
