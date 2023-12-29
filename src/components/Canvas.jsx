@@ -34,7 +34,7 @@ const Canvas = () => {
 
       Array.from({ length: config.rows }, () => addRow(canvas, stopGameLoop))
 
-      Array.from({ length: Math.ceil(530 / config.speed) }, () =>
+      Array.from({ length: Math.ceil(600 / config.speed) }, () =>
          tileRows.forEach((row) => row.decrement())
       )
 
