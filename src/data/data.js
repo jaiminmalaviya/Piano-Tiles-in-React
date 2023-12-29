@@ -3,7 +3,7 @@ export default {
    config: {
       width: Math.min(window.innerWidth, 400),
       height: window.innerHeight,
-      rows: 5,
+      rows: 4,
       cols: 4,
       speed: 2,
       interval: 20,
