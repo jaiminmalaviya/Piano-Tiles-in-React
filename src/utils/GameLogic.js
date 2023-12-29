@@ -81,8 +81,8 @@ const handleGameUserInput = (
    const ctx = canvas.getContext('2d')
    if (!isGameStarted) setIsGameStarted(true)
 
-   tileRows.length < 30 ? (config.speed += 0.1) : (config.speed += 0.05)
-
+   config.speed = Math.min(config.speed + (tileRows.length < 30 ? 0.1 : 0.05), config.maxSpeed)
+   console.log(config.speed)
    const tile_width = config.width / config.cols
    const tile_height = config.height / config.rows
    const x = e.clientX - canvas.offsetLeft
